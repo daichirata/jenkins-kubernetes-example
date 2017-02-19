@@ -1,0 +1,6 @@
+Starting health checks at Fri Feb 24 01:27:07 JST 2017
+Health check results at Fri Feb 24 01:27:07 JST 2017:
+ * disk-space: Result{isHealthy=true}
+ * plugins: Result{isHealthy=true, message=No failed plugins}
+ * temporary-space: Result{isHealthy=true}
+ * thread-deadlock: Result{isHealthy=true}

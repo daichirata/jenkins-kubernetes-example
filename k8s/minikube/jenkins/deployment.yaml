@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: master
+    spec:
+      containers:
+        - name: master
+          # This image includes workaround for https://github.com/kubernetes/minikube/issues/956
+          image: daic/jenkins:2.32.2-alpine
+          ports:
+            - containerPort: 8080
+            - containerPort: 50000
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: jenkins-data
+              mountPath: /var/jenkins_home
+          env:
+            - name: JAVA_OPTS
+              value: '-Duser.timezone=Asia/Tokyo -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8'
+      volumes:
+        - name: jenkins-data
+          hostPath:
+            path: __JENKINS_VOLUME__
